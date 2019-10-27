@@ -8,6 +8,11 @@
   <div id="root"></div>
   <script type="text/babel">
 
+    const skiDictionary = [
+      { id: 1, name: 'Send', definition: "To throw one's body off of a cliff or rock" },
+      { id: 2, name: "Chowder", definition: "Snow or powder that has been skied" }
+    ];
+
     const NavItems = () => {
       return(
       <React.Fragment>
@@ -19,18 +24,21 @@
       );
     };
 
-    const App = () => {
+    const App = (props) => {
       return(
-      <header>
-        <nav>
-          <NavItems />
-        </nav>
-      </header>
-    );
+        <dl>
+          {props.skiDictionary.map(term => (
+            <React.Fragment key={term.id}>
+              <dt>{term.name}</dt>
+              <dd>{term.definition}</dd>
+            </React.Fragment>
+          ))}
+        </dl>
+      );
     };
 
     ReactDOM.render(
-      <App />,
+      <App skiDictionary={skiDictionary}/>,
       document.getElementById('root')
     )
 
