@@ -5,40 +5,27 @@
     <script src="https://unpkg.com/react/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom/umd/react-dom.development.js"></script>
   </head>
-  <body>
-    <div id="root"></div>
-    <script type="text/babel">
+  <div id="root"></div>
+  <script type="text/babel">
 
-      const NowEating = (props) => <h1>{props.meal}</h1>;
-
-      class Menu extends React.Component{
-        state = {
-          meal: 'Spaghetti'
-        };
-
-        addSideDish = () => {
-          this.setState(prevState => {
-            return { meal: `${prevState.meal} & salad` }
-          })
-        };
-
-        render(){
-          return(
-          <div>
-            <NowEating meal = {this.state.meal} />
-            {(this.state.meal === 'Spaghetti')
-              ? <button onClick={this.addSideDish}>Add Side Dish</button>
-              : null}
-          </div>
-          )
+      const Display = ({ifTruthy=true, children}) => {
+        if (ifTruthy) {
+          console.log(children);
+          return React.Children.only(children);
+        } else {
+          console.log(children);
+          return null
         }
       };
 
+      const age = 12;
+
       ReactDOM.render(
-        <Menu />,
+        <Display ifTruthy={age >= 18}>
+          <h1>You can vote</h1>
+        </Display>,
         document.getElementById('root')
       );
 
-    </script>
-  </body>
+  </script>
 </html>
