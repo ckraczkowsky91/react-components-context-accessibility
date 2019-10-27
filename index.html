@@ -9,23 +9,33 @@
     <div id="root"></div>
     <script type="text/babel">
 
-      const data = [
-        { greeting: "Hello!", id: 1 },
-        { greeting: "Bonjour!", id: 2 },
-        { greeting: "Hola!", id: 3 }
-      ];
+      const NowEating = (props) => <h1>{props.meal}</h1>;
 
-      const Greetings = ({info}) => {
-        return info.map(item => {
-          return (
-            <li key={item.id}>{item.greeting}</li>
+      class Menu extends React.Component{
+        state = {
+          meal: 'Spaghetti'
+        };
+
+        addSideDish = () => {
+          this.setState(prevState => {
+            return { meal: `${prevState.meal} & salad` }
+          })
+        };
+
+        render(){
+          return(
+          <div>
+            <NowEating meal = {this.state.meal} />
+            {(this.state.meal === 'Spaghetti')
+              ? <button onClick={this.addSideDish}>Add Side Dish</button>
+              : null}
+          </div>
           )
-        })
+        }
       };
-// give the Greetings component a prop called info that references the array of Greetings
-// shows that we can now use ReactDOM.render() to render an array of components rather than a single component
+
       ReactDOM.render(
-        <Greetings info={data}/>,
+        <Menu />,
         document.getElementById('root')
       );
 
