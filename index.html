@@ -8,41 +8,31 @@
   <div id="root"></div>
   <script type="text/babel">
 
-    class EncouragementForm extends React.Component {
-      state = {
-        message: ''
-      };
+    const NavItems = () => {
+      return(
+      <React.Fragment>
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/services">Services</a>
+        <a href="/contact">Contact</a>
+      </React.Fragment>
+      );
+    };
 
-      handleChange = (event) => {
-        this.setState({
-          message: event.target.value
-        });
-      };
-
-      handleSubmit = (event) => {
-        alert(this.state.message);
-        event.preventDefault();
-      };
-
-      render() {
-        return(
-          <form onSubmit={this.handleSubmit}>
-            <label>
-              Send an Encouraging Message:
-              <input text='text' value={this.state.message} onChange={this.handleChange}/>
-            </label>
-            <button>
-              Submit
-            </button>
-          </form>
-        )
-      };
+    const App = () => {
+      return(
+      <header>
+        <nav>
+          <NavItems />
+        </nav>
+      </header>
+    );
     };
 
     ReactDOM.render(
-      <EncouragementForm />,
+      <App />,
       document.getElementById('root')
-    );
+    )
 
   </script>
 </html>
