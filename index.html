@@ -8,24 +8,30 @@
   <div id="root"></div>
   <script type="text/babel">
 
-      const Display = ({ifTruthy=true, children}) => {
-        if (ifTruthy) {
-          console.log(children);
-          return React.Children.only(children);
-        } else {
-          console.log(children);
-          return null
-        }
+    class EncouragementForm extends React.Component {
+      handleSubmit = (event) => {
+        alert(this.input.value);
+        event.preventDefault();
+      }
+      render() {
+        return(
+          <form onSubmit={this.handleSubmit}>
+            <label>
+              Send an Encouraging Message:
+              <input text='text' ref={input => this.input = input}/>
+            </label>
+            <button>
+              Submit
+            </button>
+          </form>
+        )
       };
+    };
 
-      const age = 12;
-
-      ReactDOM.render(
-        <Display ifTruthy={age >= 18}>
-          <h1>You can vote</h1>
-        </Display>,
-        document.getElementById('root')
-      );
+    ReactDOM.render(
+      <EncouragementForm />,
+      document.getElementById('root')
+    );
 
   </script>
 </html>
