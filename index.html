@@ -8,37 +8,58 @@
   <div id="root"></div>
   <script type="text/babel">
 
-    const skiDictionary = [
-      { id: 1, name: 'Send', definition: "To throw one's body off of a cliff or rock" },
-      { id: 2, name: "Chowder", definition: "Snow or powder that has been skied" }
-    ];
+    const Context = React.createContext();
 
-    const NavItems = () => {
-      return(
-      <React.Fragment>
-        <a href="/">Home</a>
-        <a href="/about">About</a>
-        <a href="/services">Services</a>
-        <a href="/contact">Contact</a>
-      </React.Fragment>
-      );
+    class Provider extends React.Component {
+      state = {
+        name: 'Sawtooth Mountains'
+      };
+
+      render() {
+        return(
+          <Context.Provider value={{state: this.state}}>
+            {this.props.children}
+          </Context.Provider>
+        );
+      };
     };
 
-    const App = (props) => {
-      return(
-        <dl>
-          {props.skiDictionary.map(term => (
-            <React.Fragment key={term.id}>
-              <dt>{term.name}</dt>
-              <dd>{term.definition}</dd>
-            </React.Fragment>
-          ))}
-        </dl>
-      );
+    const Trail = (props) => {
+        return(
+            <div>
+              <Context.Consumer>
+                {(context) => {
+                  return(
+                  <p>This is the context: {context.state.name}</p>
+                  )}
+                }
+              </Context.Consumer>
+            </div>
+        );
+    };
+
+    const Lift = (props) => {
+        return(
+          <div>
+            <Trail />
+          </div>
+        );
+    };
+
+    class Resort extends React.Component {
+      render() {
+        return(
+          <Provider>
+            <div>
+              <Lift />
+            </div>
+          </Provider>
+        );
+      };
     };
 
     ReactDOM.render(
-      <App skiDictionary={skiDictionary}/>,
+      <Resort />,
       document.getElementById('root')
     )
 
