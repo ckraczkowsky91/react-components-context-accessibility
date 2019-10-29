@@ -8,70 +8,66 @@
   <div id="root"></div>
   <script type="text/babel">
 
-    const Context = React.createContext();
-
-    class Provider extends React.Component {
-      state = {
-        name: 'Sawtooth Mountains',
-        status: 'OPEN'
-      };
-
-      render() {
-        return(
-          <Context.Provider value={{
-            state: this.state,
-            changeStatus: () => {
-              this.setState({
-                status: 'CLOSED'
+    const DataComponent = (ComposedComponent, url) => {
+      return(
+        class DataComponent extends React.Component {
+          constructor(props){
+            super(props);
+            this.state = {
+              data: [],
+              loading: false,
+              loaded: false
+            };
+          };
+// using the componentDidMount() lifecycle method to load the data
+          componentDidMount(){
+            this.setState({
+                loading: true
+            });
+            fetch(url)
+              .then((response) => {return response.json()})
+              .then((data) => {
+                this.setState({
+                  loaded: true,
+                  loading: false,
+                  data: data
+                })
               })
-            }
-          }}>
-            {this.props.children}
-          </Context.Provider>
-        );
-      };
+          };
+
+          render(){
+            return(
+              <div>
+                {this.state.loaded
+                  ? <ComposedComponent {...this.state} {...this.props} />
+                  : <div>Loading</div> }
+              </div>
+            );
+          };
+        }
+      );
     };
 
-    const Trail = (props) => {
-        return(
-            <div>
-              <Context.Consumer>
-                {(context) => {
-                  return(
-                    <div>
-                      <p>This is the context: {context.state.name}</p>
-                      <p>The resort is: {context.state.status}</p>
-                      <button onClick={context.changeStatus}>Close Resort</button>
-                    </div>
-                  )}
-                }
-              </Context.Consumer>
-            </div>
-        );
+    const PeopleList = ({data}) => {
+      return(
+        <ol>
+          {data.results.map((person, i) => {
+            const {first, last} = person.name;
+            return(
+              <li key={i}>{first} {last}</li>
+            );
+          })}
+        </ol>
+      );
     };
 
-    const Lift = (props) => {
-        return(
-          <div>
-            <Trail />
-          </div>
-        );
-    };
-
-    class Resort extends React.Component {
-      render() {
-        return(
-          <Provider>
-            <div>
-              <Lift />
-            </div>
-          </Provider>
-        );
-      };
-    };
+    const RandomMeUsers = DataComponent(
+      PeopleList,
+      'https://randomuser.me/api?results=10'
+    );
 
     ReactDOM.render(
-      <Resort />,
+      <RandomMeUsers />,
       document.getElementById('root')
     )
 
